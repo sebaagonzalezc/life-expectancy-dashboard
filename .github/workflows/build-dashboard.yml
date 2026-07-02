@@ -28,7 +28,11 @@ jobs:
         run: |
           pip install pandas numpy matplotlib seaborn plotly kagglehub nbconvert nbformat jupyter ipykernel
 
-      - name: Configure Kaggle credentials
+      # Solo hace falta si el dataset pide login (privado o con consentimiento).
+      # Para datasets públicos normales, kagglehub no requiere credenciales:
+      # https://github.com/Kaggle/kagglehub#authenticate
+      - name: Configure Kaggle credentials (opcional)
+        if: ${{ secrets.KAGGLE_USERNAME != '' }}
         run: |
           mkdir -p ~/.kaggle
           echo '{"username":"${{ secrets.KAGGLE_USERNAME }}","key":"${{ secrets.KAGGLE_KEY }}"}' > ~/.kaggle/kaggle.json
